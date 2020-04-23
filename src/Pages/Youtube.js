@@ -13,7 +13,9 @@ class Youtube extends Component {
         this.state = {
              searchKey : '',
              videoList : [],
-             clickedVideoId : ''
+             clickedVideoId : '',
+             ClickedVideoData : '',
+             load : true
         }
         this.getList=this.getList.bind(this)
         this.getVideo=this.getVideo.bind(this)
@@ -26,23 +28,31 @@ class Youtube extends Component {
                 part : 'snippet',
                 maxResults : 10,
                 key : KEY,
-                q : searchKey
+                q : searchKey,
             }
         })
 
         //console.log(response)
         this.setState({
-            videoList : response.data.items
+            videoList : response.data.items,
+            clickedVideoId : ''
         })
         //console.log(this.state.videoList)
     }
 
-    getVideo = async(videoId) => {
-        console.log(videoId)
+    getVideo(VideoId,data){
+        //console.log(VideoId)
+        console.log(data)
+
+        this.setState({
+           clickedVideoId : VideoId,
+           ClickedVideoData : data
+        })
     }
 
     render() {
-        if(this.state.clickedVideoId !== ''){
+        //console.log(this.state)
+        if(this.state.clickedVideoId === ''){
             return (
                 <div>
                     <Search getValue={this.getList}/>
@@ -54,7 +64,7 @@ class Youtube extends Component {
             return (
                 <div>
                     <Search getValue={this.getList}/>
-                    <VideoPlayer />
+                    <VideoPlayer videoData={this.state.ClickedVideoData} videoId={this.state.clickedVideoId}/>
                 </div>
             )
         }
